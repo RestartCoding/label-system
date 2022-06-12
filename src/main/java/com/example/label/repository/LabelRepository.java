@@ -17,4 +17,20 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
      * @return optional label
      */
     Optional<Label> findByNameAndParentCode(String name, String parentCode);
+
+    /**
+     * 根据parentCode查找
+     *
+     * @param parentCode parentCode
+     * @return optional label
+     */
+    Optional<Label> findByParentCode(String parentCode);
+
+    /**
+     * 根据code查找label
+     *
+     * @param code code
+     * @return label
+     */
+    Optional<Label> findByCode(String code);
 }

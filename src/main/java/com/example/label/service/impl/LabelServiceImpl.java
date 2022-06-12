@@ -26,6 +26,12 @@ public class LabelServiceImpl implements LabelService {
         if (optionalLabel.isPresent()){
             throw new ServiceException("Label already exists.");
         }
+        // 父标签是否存在
+        Optional<Label> parentLabel = labelRepository.findByCode(labelInput.getParentCode());
+        if (!parentLabel.isPresent()){
+            throw new ServiceException("Parent label not found.");
+        }
+
         Label label = new Label();
         label.setName(labelInput.getName());
         label.setParentCode(labelInput.getParentCode());

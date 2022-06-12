@@ -6,6 +6,7 @@ import com.example.label.repository.LabelRepository;
 import com.example.label.service.LabelService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,7 +27,7 @@ public class LabelController {
     }
 
     @PostMapping
-    public Long add(@RequestBody LabelInput labelInput) {
+    public Long add(@Validated @RequestBody LabelInput labelInput) {
         return labelService.add(labelInput);
     }
 }

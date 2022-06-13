@@ -1,6 +1,6 @@
 package com.example.label.service.impl;
 
-import com.example.label.dto.LabelInput;
+import com.example.label.dto.label.LabelInput;
 import com.example.label.entity.Label;
 import com.example.label.enums.LabelAuth;
 import com.example.label.enums.LabelStatus;
@@ -14,6 +14,10 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * @author jack
+ * @date 2022-06-13
+ */
 @Service
 public class LabelServiceImpl implements LabelService {
 

@@ -1,8 +1,12 @@
 package com.example.label.service;
 
 
-import com.example.label.dto.LabelInput;
+import com.example.label.dto.label.LabelInput;
 
+/**
+ * @author jack
+ * @date 2022-06-13
+ */
 public interface LabelService {
 
     /**

@@ -1,21 +1,53 @@
 package com.example.label.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @date 2022-06-13
+ * @author jack
+ */
 public enum LabelAuth {
 
-    PRIVATE(0),
+    /**
+     * 私有标签。只有创建者自己可用
+     */
+    PRIVATE(0, "私有"),
 
-    PROTECT(1),
+    /**
+     * 授权标签。只有创建者和被授权的用户可以使用
+     */
+    PROTECT(1, "授权"),
 
-    PUBLIC(2);
+    /**
+     * 共享标签。所有人均可使用
+     */
+    PUBLIC(2, "共享");
 
     private int code;
+
+    private String desc;
+
+    private static Map<Integer, LabelAuth> map = new HashMap<>();
 
     public int getCode() {
         return code;
     }
 
-    LabelAuth(int code) {
+    public String getDesc() {
+        return desc;
+    }
+
+    LabelAuth(int code, String desc) {
         this.code = code;
+        this.desc = desc;
+    }
+
+    static {
+        LabelAuth[] auths = values();
+        for (LabelAuth labelAuth : auths){
+            map.put(labelAuth.getCode(), labelAuth);
+        }
     }
 
     public static LabelAuth of(int code){
@@ -25,5 +57,9 @@ public enum LabelAuth {
             }
         }
         return null;
+    }
+
+    public static LabelAuth getInstance(int code){
+        return map.get(code);
     }
 }

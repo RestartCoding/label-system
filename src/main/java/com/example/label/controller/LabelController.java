@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * @author jack
+ */
 @RestController
 @RequestMapping("/label")
 public class LabelController {
@@ -44,6 +48,7 @@ public class LabelController {
         return labelService.add(labelInput);
     }
 
+    @PreAuthorize("hasAuthority('label:export')")
     @GetMapping("/export")
     public void export(HttpServletResponse response) {
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=label.xlsx");

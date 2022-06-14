@@ -3,9 +3,12 @@ package com.example.label.security;
 import com.example.label.entity.RoleOperation;
 import com.example.label.entity.User;
 import com.example.label.entity.UserRole;
+import com.example.label.filter.JwtFilter;
 import com.example.label.repository.RoleOperationRepository;
 import com.example.label.repository.UserRepository;
 import com.example.label.repository.UserRoleRepository;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +23,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -39,23 +44,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Resource private UserRepository userRepository;
 
-  @Resource private PasswordEncoder passwordEncoder;
-
   @Resource private UserRoleRepository userRoleRepository;
 
   @Resource private RoleOperationRepository roleOperationRepository;
 
+  @Resource
+  private JwtFilter jwtFilter;
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.formLogin().permitAll();
-    http.csrf().disable();
+    http.authorizeRequests().antMatchers("/jwt/**").permitAll();
     http.authorizeRequests().anyRequest().authenticated();
+    http.csrf().disable();
+
+    http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder() throws NoSuchAlgorithmException {
-    return new BCryptPasswordEncoder(
-        BCryptPasswordEncoder.BCryptVersion.$2Y, SecureRandom.getInstanceStrong());
+  public PasswordEncoder passwordEncoder() {
+    try {
+      return new BCryptPasswordEncoder(
+          BCryptPasswordEncoder.BCryptVersion.$2Y, SecureRandom.getInstanceStrong());
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
@@ -68,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String password = (String) token.getCredentials();
         Optional<User> optionalUser = userRepository.findByUsername(username);
         if (!optionalUser.isPresent()
-            || !passwordEncoder.matches(password, optionalUser.get().getPassword())) {
+            || !passwordEncoder().matches(password, optionalUser.get().getPassword())) {
           throw new UsernameNotFoundException("Incorrect username or password.");
         }
 
@@ -90,5 +103,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       }
       throw new InsufficientAuthenticationException("Can not authenticate.");
     };
+  }
+
+  @Bean
+  public Key jwtSecretKey() {
+    return Keys.secretKeyFor(SignatureAlgorithm.HS512);
   }
 }

@@ -26,6 +26,12 @@ public class LabelServiceImpl implements LabelService {
 
     @Override
     public long add(LabelInput labelInput) {
+
+        // whether name is regular
+        if (!Labels.isRegularName(labelInput.getName())){
+            throw new ServiceException("Label name is not regular.");
+        }
+
         Optional<Label> optionalLabel = labelRepository.findByNameAndParentCode(labelInput.getName(), labelInput.getParentCode());
         if (optionalLabel.isPresent()){
             throw new ServiceException("Label already exists.");

@@ -7,12 +7,15 @@ import com.example.label.enums.LabelStatus;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
  * @author jack
  */
 public class Labels {
+
+    private static Pattern labelNamePattern = Pattern.compile("^((?!['/\\\\:*?\"<>|]).){1,32}$");
 
     public static String generateCode() {
         return UUID.randomUUID().toString().replace("-", "");
@@ -60,6 +63,16 @@ public class Labels {
     public static String getName(String fullName){
         int i = fullName.lastIndexOf("/");
         return fullName.substring(i + 1);
+    }
+
+    /**
+     * determine if name is regular
+     *
+     * @param name label name
+     * @return true if is regular. otherwise false
+     */
+    public static boolean isRegularName(String name){
+        return labelNamePattern.matcher(name).matches();
     }
 
     private Labels() {

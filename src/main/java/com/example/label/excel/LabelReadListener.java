@@ -44,9 +44,16 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
   public void invoke(ImportExportDTO data, AnalysisContext context) {
     importResult.add(data);
     data.setLineNum(startRow++);
+
     //  标签全名不能为空
     if (ObjectUtils.isEmpty(data.getFullName())) {
       data.setMsg("Full label name can not be empty.");
+      return;
+    }
+
+    // whether label name is regular
+    if (!Labels.isRegularName(Labels.getName(data.getFullName()))){
+      data.setMsg("Label name is not regular.");
       return;
     }
 

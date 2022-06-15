@@ -48,4 +48,9 @@ public class LabelServiceImpl implements LabelService {
         labelRepository.save(label);
         return label.getId();
     }
+
+    @Override
+    public Optional<Label> getByFullName(String fullName) {
+        return labelRepository.selectByFullName(fullName);
+    }
 }

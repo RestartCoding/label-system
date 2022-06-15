@@ -6,6 +6,9 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * @author jack
+ */
 @Data
 public class LabelInput {
 
@@ -16,8 +19,4 @@ public class LabelInput {
     @NotEmpty(message = "parentCode can not be empty.")
     @Length(max = 128, message = "parentCode max length is 128.")
     private String parentCode;
-
-    private String auth;
-
-    private String status;
 }

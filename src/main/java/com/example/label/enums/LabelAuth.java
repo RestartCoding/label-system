@@ -30,6 +30,8 @@ public enum LabelAuth {
 
     private static Map<Integer, LabelAuth> map = new HashMap<>();
 
+    private static Map<String, LabelAuth> desc2Map = new HashMap<>();
+
     public int getCode() {
         return code;
     }
@@ -44,9 +46,9 @@ public enum LabelAuth {
     }
 
     static {
-        LabelAuth[] auths = values();
-        for (LabelAuth labelAuth : auths){
+        for (LabelAuth labelAuth : values()){
             map.put(labelAuth.getCode(), labelAuth);
+            desc2Map.put(labelAuth.getDesc(), labelAuth);
         }
     }
 
@@ -61,5 +63,9 @@ public enum LabelAuth {
 
     public static LabelAuth getInstance(int code){
         return map.get(code);
+    }
+
+    public static LabelAuth getByDesc(String desc){
+        return desc2Map.get(desc);
     }
 }

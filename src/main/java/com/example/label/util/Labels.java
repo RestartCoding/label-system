@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * @author jack
+ */
 public class Labels {
 
     public static String generateCode() {
@@ -23,8 +26,7 @@ public class Labels {
     public static ImportExportDTO convert(Label label){
         ImportExportDTO dto = new ImportExportDTO();
         dto.setCode(label.getCode());
-        dto.setFullTagName(label.getName());
-        dto.setParentCode(label.getParentCode());
+        dto.setFullName(label.getName());
         LabelAuth auth = LabelAuth.getInstance(label.getAuth());
         if (auth != null){
             dto.setAuth(auth.getDesc());
@@ -37,12 +39,27 @@ public class Labels {
     }
 
     /**
-     * 批量装换
+     * 批量转换
      * @param labels labels
      * @return importExportDtoList
      */
     public static List<ImportExportDTO> convert(List<Label> labels){
         return labels.stream().map(Labels::convert).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取父标签全名
+     * @param fullName fullName
+     * @return parent full name
+     */
+    public static String getParentFullName(String fullName){
+        int i = fullName.lastIndexOf("/");
+        return fullName.substring(0, Math.max(0, i));
+    }
+
+    public static String getName(String fullName){
+        int i = fullName.lastIndexOf("/");
+        return fullName.substring(i + 1);
     }
 
     private Labels() {

@@ -35,6 +35,8 @@ public enum LabelStatus {
 
     private static Map<Integer, LabelStatus> map = new HashMap<>();
 
+    private static Map<String, LabelStatus> desc2Map = new HashMap<>();
+
     public int getCode() {
         return code;
     }
@@ -51,6 +53,7 @@ public enum LabelStatus {
     static {
         for (LabelStatus labelStatus : values()){
             map.put(labelStatus.getCode(), labelStatus);
+            desc2Map.put(labelStatus.getDesc(), labelStatus);
         }
     }
 
@@ -65,5 +68,9 @@ public enum LabelStatus {
 
     public static LabelStatus getInstance(int code){
         return map.get(code);
+    }
+
+    public static LabelStatus getByDesc(String desc){
+        return desc2Map.get(desc);
     }
 }

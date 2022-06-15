@@ -54,8 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.formLogin().permitAll();
-    http.authorizeRequests().antMatchers("/jwt/**").permitAll();
+    http.authorizeRequests().antMatchers("/jwt/**", "/h2-console/**").permitAll();
     http.authorizeRequests().anyRequest().authenticated();
+    // can not use h2-console if do not do this
+    http.headers().frameOptions().disable();
     http.csrf().disable();
 
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -72,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
-  protected AuthenticationManager authenticationManager() throws Exception {
+  protected AuthenticationManager authenticationManager() {
     return (authentication) -> {
       if (authentication instanceof UsernamePasswordAuthenticationToken) {
         UsernamePasswordAuthenticationToken token =

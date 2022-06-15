@@ -15,30 +15,30 @@ import java.util.Optional;
 @Repository
 public interface LabelRepository extends PagingAndSortingRepository<Label, Long> {
 
-    /**
-     * 标签名称和父标签编号查询唯一标签
-     *
-     * @param name       name
-     * @param parentCode parentCode
-     * @return optional label
-     */
-    Optional<Label> findByNameAndParentCode(String name, String parentCode);
+  /**
+   * 标签名称和父标签编号查询唯一标签
+   *
+   * @param name name
+   * @param parentCode parentCode
+   * @return optional label
+   */
+  Optional<Label> findByNameAndParentCode(String name, String parentCode);
 
-    /**
-     * 根据parentCode查找
-     *
-     * @param parentCode parentCode
-     * @return optional label
-     */
-    Optional<Label> findByParentCode(String parentCode);
+  /**
+   * 根据parentCode查找
+   *
+   * @param parentCode parentCode
+   * @return optional label
+   */
+  Optional<Label> findByParentCode(String parentCode);
 
-    /**
-     * 根据code查找label
-     *
-     * @param code code
-     * @return label
-     */
-    Optional<Label> findByCode(String code);
+  /**
+   * 根据code查找label
+   *
+   * @param code code
+   * @return label
+   */
+  Optional<Label> findByCode(String code);
 
   /**
    * 查询excel数据用
@@ -58,4 +58,21 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
               + "  )\n"
               + "SELECT * FROM r;")
   List<Label> selectExcelData();
+
+  /**
+   * 标签全名查询
+   *
+   * @param fullName fullName
+   * @return label
+   */
+  @Query(
+      "with recursive r (code, name) as (\n"
+          + "  select code, concat('/', name) from label\n"
+          + "  where parent_code is null\n"
+          + "  union all\n"
+          + "  select label.code, concat(r.name, '/', label.name) from label, r\n"
+          + "  where label.parent_code = r.code\n"
+          + ")\n"
+          + "select * from label where code = (select code from r where name = :fullName);")
+  Optional<Label> selectByFullName(String fullName);
 }

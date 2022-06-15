@@ -1,12 +1,9 @@
 package com.example.label.security;
 
-import com.example.label.entity.RoleOperation;
 import com.example.label.entity.User;
-import com.example.label.entity.UserRole;
 import com.example.label.filter.JwtFilter;
-import com.example.label.repository.RoleOperationRepository;
 import com.example.label.repository.UserRepository;
-import com.example.label.repository.UserRoleRepository;
+import com.example.label.service.UserService;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +15,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,8 +24,6 @@ import javax.annotation.Resource;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,9 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Resource private UserRepository userRepository;
 
-  @Resource private UserRoleRepository userRoleRepository;
-
-  @Resource private RoleOperationRepository roleOperationRepository;
+  @Resource private UserService userService;
 
   @Resource
   private JwtFilter jwtFilter;
@@ -87,21 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           throw new UsernameNotFoundException("Incorrect username or password.");
         }
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        // 查询用户角色
-        List<UserRole> userRoles = userRoleRepository.findByUsername(username);
-        List<String> roleCodes = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-          roleCodes.add(userRole.getRoleCode());
-          authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRoleCode()));
-        }
-        // 查询角色操作
-        List<RoleOperation> roleOperations = roleOperationRepository.findAllByRoleCodeIn(roleCodes);
-        for (RoleOperation roleOperation : roleOperations) {
-          authorities.add(new SimpleGrantedAuthority(roleOperation.getOperationCode()));
-        }
         // 设置权限
-        return new UsernamePasswordAuthenticationToken(username, password, authorities);
+        return new UsernamePasswordAuthenticationToken(username, password, userService.getAuthorities(username));
       }
       throw new InsufficientAuthenticationException("Can not authenticate.");
     };

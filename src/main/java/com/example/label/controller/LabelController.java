@@ -42,11 +42,13 @@ public class LabelController {
     @Resource
     private LabelService labelService;
 
+    @PreAuthorize("hasAnyAuthority('label:page')")
     @GetMapping("/page")
     public Page<Label> page() {
         return labelRepository.findAll(PageRequest.of(0, 10));
     }
 
+    @PreAuthorize("hasAnyAuthority('label:create')")
     @PostMapping
     public Long add(@Validated @RequestBody LabelInput labelInput) {
         return labelService.add(labelInput);
@@ -71,6 +73,7 @@ public class LabelController {
         }
     }
 
+  @PreAuthorize("hasAuthority('label:import')")
     @PostMapping("/import")
     @JsonView(ImportExportDTO.ImportResultView.class)
     public List<ImportExportDTO> importLabel(MultipartFile file) throws IOException {

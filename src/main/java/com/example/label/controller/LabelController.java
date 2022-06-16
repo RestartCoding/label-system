@@ -50,7 +50,7 @@ public class LabelController {
 
     @PreAuthorize("hasAnyAuthority('label:create')")
     @PostMapping
-    public Long add(@Validated @RequestBody LabelInput labelInput) {
+    public String add(@Validated @RequestBody LabelInput labelInput) {
         return labelService.add(labelInput);
     }
 

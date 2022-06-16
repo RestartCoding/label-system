@@ -41,7 +41,7 @@ public class JwtController {
       throw new BadCredentialsException("Incorrect username or password.");
     }
     return Jwts.builder()
-        .signWith(jwtSecretKey, SignatureAlgorithm.HS512)
+        .signWith(jwtSecretKey, SignatureAlgorithm.HS256)
         .setAudience(username)
         .setExpiration(
             new Date(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(VALID_TIME_MINUTES)))

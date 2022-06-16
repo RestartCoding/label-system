@@ -9,6 +9,7 @@ import com.example.label.enums.LabelStatus;
 import com.example.label.repository.LabelRepository;
 import com.example.label.util.Labels;
 import com.example.label.util.SpringBeanUtils;
+import com.example.label.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
@@ -111,6 +112,7 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
     label.setParentCode(parentLabelOptional.get().getCode());
     label.setAuth(auth.getCode());
     label.setStatus(status.getCode());
+    label.setCreator(UserUtils.currUsername());
 
     Date date = new Date();
     label.setCreateTime(date);

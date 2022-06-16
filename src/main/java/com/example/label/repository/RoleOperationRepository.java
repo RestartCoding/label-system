@@ -9,7 +9,7 @@ import java.util.List;
  * @author xiabiao
  * @date 2022-06-14
  */
-public interface RoleOperationRepository extends CrudRepository<RoleOperation, String> {
+public interface RoleOperationRepository extends CrudRepository<RoleOperation, Long> {
   /**
    * 角色编号查询角色操作关系
    *

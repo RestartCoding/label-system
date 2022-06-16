@@ -9,7 +9,7 @@ import java.util.List;
  * @author xiabiao
  * @date 2022-06-14
  */
-public interface UserRoleRepository extends CrudRepository<UserRole, String> {
+public interface UserRoleRepository extends CrudRepository<UserRole, Long> {
   /**
    * 用户名查找用户角色关系
    *

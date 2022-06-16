@@ -4,8 +4,8 @@ import com.example.label.entity.User;
 import com.example.label.filter.JwtFilter;
 import com.example.label.repository.UserRepository;
 import com.example.label.service.UserService;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -41,6 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Resource
   private JwtFilter jwtFilter;
+
+  @Value("${jwt.sk}")
+  private String jwtSk;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -87,6 +91,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public Key jwtSecretKey() {
-    return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    return Keys.hmacShaKeyFor(jwtSk.getBytes(StandardCharsets.UTF_8));
   }
 }

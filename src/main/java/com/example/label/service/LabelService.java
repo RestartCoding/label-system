@@ -18,7 +18,7 @@ public interface LabelService {
      * @param labelInput labelInput
      * @return label id
      */
-    long add(LabelInput labelInput);
+    String add(LabelInput labelInput);
 
     /**
      * 根据标签全名查询标签信息

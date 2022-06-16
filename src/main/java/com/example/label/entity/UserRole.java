@@ -13,6 +13,8 @@ import java.util.Date;
 public class UserRole {
 
   @Id
+  private Long id;
+
   private String username;
 
   private String roleCode;

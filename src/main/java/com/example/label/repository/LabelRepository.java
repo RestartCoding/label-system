@@ -41,6 +41,14 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
   Optional<Label> findByCode(String code);
 
   /**
+   * 标签编号批量查询
+   *
+   * @param codes codes
+   * @return label list
+   */
+  List<Label> findAllByCodeIn(List<String> codes);
+
+  /**
    * 查询excel数据用
    *
    * @return excel导出数据

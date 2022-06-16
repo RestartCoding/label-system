@@ -2,7 +2,6 @@ package com.example.label.filter;
 
 import com.example.label.authentication.JwtAuthenticationToken;
 import com.example.label.entity.User;
-import com.example.label.exception.JwtExpiredException;
 import com.example.label.repository.UserRepository;
 import com.example.label.service.UserService;
 import io.jsonwebtoken.Claims;
@@ -51,28 +50,32 @@ public class JwtFilter extends OncePerRequestFilter {
       HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
 
-    String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (StringUtils.hasText(authorization) && authorization.startsWith(BEARER_PREFIX)) {
-      Jws<Claims> claims =
-          Jwts.parserBuilder()
-              .setSigningKey(jwtSecretKey)
-              .build()
-              .parseClaimsJws(authorization.substring(BEARER_PREFIX.length()));
-      Date date = claims.getBody().getExpiration();
-      if (date.getTime() < System.currentTimeMillis()) {
-        logger.error("Failed to Jwt authenticated.");
-        throw new JwtExpiredException("Your jwt is expired. Please apply a new one.");
-      }
+    try{
+      String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+      if (StringUtils.hasText(authorization) && authorization.startsWith(BEARER_PREFIX)) {
+        Jws<Claims> claims =
+                Jwts.parserBuilder()
+                        .setSigningKey(jwtSecretKey)
+                        .build()
+                        .parseClaimsJws(authorization.substring(BEARER_PREFIX.length()));
+        Date date = claims.getBody().getExpiration();
+        if (date.getTime() < System.currentTimeMillis()) {
+          logger.error("Failed to Jwt authenticated.");
+        }else {
+          String username = claims.getBody().getAudience();
+          Optional<User> optionalUser = userRepository.findByUsername(username);
+          if (optionalUser.isPresent()){
+            // 这里的密码已经是加密之后的了
+            Authentication authentication =
+                    new JwtAuthenticationToken(
+                            username, optionalUser.get().getPassword(), userService.getAuthorities(username));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+          }
+        }
 
-      String username = claims.getBody().getAudience();
-      Optional<User> optionalUser = userRepository.findByUsername(username);
-      if (optionalUser.isPresent()){
-        // 这里的密码已经是加密之后的了
-        Authentication authentication =
-            new JwtAuthenticationToken(
-                username, optionalUser.get().getPassword(), userService.getAuthorities(username));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
       }
+    }catch (Exception e){
+      logger.error("", e);
     }
 
     filterChain.doFilter(request, response);

@@ -11,7 +11,8 @@ insert into operation(code, name, description) values
 ('label:import', '标签导入', '标签导入的操作'),
 ('label:export', '标签导出', '标签导出的操作'),
 ('label:create', '标签创建', '标签创建的操作'),
-('label:page', '标签分页查询', '标签分页查询的操作');
+('label:page', '标签分页查询', '标签分页查询的操作'),
+('label:update', '标签更新', '可以更新标签');
 
 insert into user_role(username, role_code)
 values ('admin', 'admin');
@@ -20,4 +21,5 @@ insert into role_operation(role_code, operation_code) values
 ('admin', 'label:import'),
 ('admin', 'label:export'),
 ('admin', 'label:create'),
-('admin', 'label:page');
+('admin', 'label:page'),
+('admin', 'label:update');

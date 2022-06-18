@@ -81,4 +81,14 @@ public class LabelController {
         EasyExcel.read(file.getInputStream(), ImportExportDTO.class, new LabelReadListener(2, importResult)).doReadAll();
         return importResult;
     }
+
+    /**
+     * TODO: 参数校验
+     * @param label label
+     */
+    @PreAuthorize("hasAuthority('label:update')")
+    @PutMapping
+    public void updateLabel(@RequestBody @Validated Label label) {
+        labelRepository.save(label);
+    }
 }

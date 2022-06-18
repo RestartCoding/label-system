@@ -8,6 +8,8 @@ import com.example.label.repository.LabelRepository;
 import com.example.label.service.LabelService;
 import com.example.label.util.Labels;
 import com.example.label.util.UserUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,10 +18,11 @@ import java.util.Optional;
 
 /**
  * @author jack
- * @date 2022-06-13
  */
 @Service
 public class LabelServiceImpl implements LabelService {
+
+    private static final Logger logger = LoggerFactory.getLogger(LabelServiceImpl.class);
 
     @Resource
     private LabelRepository labelRepository;
@@ -28,17 +31,17 @@ public class LabelServiceImpl implements LabelService {
     public String add(LabelInput labelInput) {
 
         // whether name is regular
-        if (!Labels.isRegularName(labelInput.getName())){
+        if (!Labels.isRegularName(labelInput.getName())) {
             throw new ServiceException("Label name is not regular.");
         }
 
         Optional<Label> optionalLabel = labelRepository.findByNameAndParentCode(labelInput.getName(), labelInput.getParentCode());
-        if (optionalLabel.isPresent()){
+        if (optionalLabel.isPresent()) {
             throw new ServiceException("Label already exists.");
         }
         // 父标签是否存在
         Optional<Label> parentLabel = labelRepository.findByCode(labelInput.getParentCode());
-        if (!parentLabel.isPresent()){
+        if (!parentLabel.isPresent()) {
             throw new ServiceException("Parent label not found.");
         }
 

@@ -89,6 +89,6 @@ public class LabelController {
     @PreAuthorize("hasAuthority('label:update')")
     @PutMapping
     public void updateLabel(@RequestBody @Validated Label label) {
-        labelRepository.save(label);
+        labelService.save(label);
     }
 }

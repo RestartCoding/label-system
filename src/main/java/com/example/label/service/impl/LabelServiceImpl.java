@@ -64,4 +64,28 @@ public class LabelServiceImpl implements LabelService {
     public Optional<Label> getByFullName(String fullName) {
         return labelRepository.selectByFullName(fullName);
     }
+
+    @Override
+    public void save(Label label) {
+
+        Optional<Label> optionalLabel = labelRepository.findByCode(label.getCode());
+        if (optionalLabel.isPresent() && !optionalLabel.get().getId().equals(label.getId())) {
+            logger.info("param: {}", label);
+            throw new ServiceException("Code already exists.");
+        }
+
+        Optional<Label> parentOptional = labelRepository.findByCode(label.getParentCode());
+        if (!parentOptional.isPresent()) {
+            logger.info("param: {}", label);
+            throw new ServiceException("Parent label not found.");
+        }
+
+        optionalLabel = labelRepository.findByNameAndParentCode(label.getName(), label.getParentCode());
+        if (optionalLabel.isPresent() && optionalLabel.get().getId().equals(label.getId())) {
+            logger.info("param: {}", label);
+            throw new ServiceException("Label already exists.");
+        }
+
+        labelRepository.save(label);
+    }
 }

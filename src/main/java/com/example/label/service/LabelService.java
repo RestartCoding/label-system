@@ -26,4 +26,11 @@ public interface LabelService {
      * @return label
      */
     Optional<Label> getByFullName(String fullName);
+
+    /**
+     * 保存标签
+     *
+     * @param label label
+     */
+    void save(Label label);
 }

@@ -5,6 +5,7 @@ create table label(
     parent_code varchar(128),
     status tinyint not null default 0,
     auth tinyint not null default 0,
+    description varchar(1024),
     creator varchar(128) not null,
     create_time timestamp not null default current_timestamp,
     update_time timestamp not null default current_timestamp,

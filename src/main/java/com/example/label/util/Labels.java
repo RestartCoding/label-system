@@ -30,6 +30,7 @@ public class Labels {
         ImportExportDTO dto = new ImportExportDTO();
         dto.setCode(label.getCode());
         dto.setFullName(label.getName());
+        dto.setDescription(label.getDescription());
         LabelAuth auth = LabelAuth.getInstance(label.getAuth());
         if (auth != null){
             dto.setAuth(auth.getDesc());

@@ -1,5 +1,5 @@
-insert into label(name, code, parent_code, creator)
-values('标签', '0', null, 'admin');
+insert into label(name, code, parent_code, description, creator)
+values('标签', '0', null, '初始标签', 'admin');
 
 insert into user(username, password, first_name, last_name)
 values ('admin', '$2y$10$wbpSrzm0aT/aUObSxaQ.aOABKahDOlG0IQmgDTsarKWkh3uR864Ja', 'Jack', 'Sha');

@@ -35,6 +35,12 @@ public class ImportExportDTO {
   @ExcelProperty(index = 3)
   private String status;
 
+  /**
+   * 描述
+   */
+  @ExcelProperty(index = 4)
+  private String description;
+
   @JsonView(ImportResultView.class)
   @ExcelIgnore
   private Integer lineNum;

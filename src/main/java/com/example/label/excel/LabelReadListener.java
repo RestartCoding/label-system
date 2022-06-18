@@ -21,7 +21,6 @@ import java.util.Optional;
 
 /**
  * @author xiabiao
- * @date 2022-06-15
  */
 public class LabelReadListener implements ReadListener<ImportExportDTO> {
 
@@ -29,7 +28,7 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
 
   private int startRow;
 
-  private List<ImportExportDTO> importResult;
+  private final List<ImportExportDTO> importResult;
 
   public LabelReadListener(int startRow, List<ImportExportDTO> importResult) {
     this.startRow = startRow;
@@ -45,7 +44,6 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
   public void invoke(ImportExportDTO data, AnalysisContext context) {
     importResult.add(data);
     data.setLineNum(startRow++);
-
     //  标签全名不能为空
     if (ObjectUtils.isEmpty(data.getFullName())) {
       data.setMsg("Full label name can not be empty.");
@@ -113,6 +111,7 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
     label.setAuth(auth.getCode());
     label.setStatus(status.getCode());
     label.setCreator(UserUtils.currUsername());
+    label.setDescription(data.getDescription());
 
     Date date = new Date();
     label.setCreateTime(date);

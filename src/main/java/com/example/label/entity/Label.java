@@ -24,6 +24,8 @@ public class Label {
 
     private Integer status;
 
+    private String description;
+
     private String creator;
 
     private Date createTime;

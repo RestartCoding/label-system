@@ -55,12 +55,12 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
    */
   @Query(
       value =
-          "WITH RECURSIVE r(code, name, parent_code, auth, status) AS (\n"
-              + "    SELECT code, concat('/', name), parent_code, auth, status\n"
+          "WITH RECURSIVE r(code, name, parent_code, auth, status, description) AS (\n"
+              + "    SELECT code, concat('/', name), parent_code, auth, status, description\n"
               + "    FROM label\n"
               + "    where parent_code is null\n"
               + "  UNION ALL\n"
-              + "    SELECT label.code, concat(r.name, '/', label.name), label.parent_code, label.auth, label.status\n"
+              + "    SELECT label.code, concat(r.name, '/', label.name), label.parent_code, label.auth, label.status, label.description\n"
               + "    FROM label, r\n"
               + "    WHERE label.parent_code = r.code\n"
               + "  )\n"

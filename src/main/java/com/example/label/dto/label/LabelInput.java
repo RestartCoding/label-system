@@ -25,4 +25,7 @@ public class LabelInput {
     @NotNull(message = "Auth can not be null.")
     @Range(max = 2, message = "Auth is invalid.")
     private Integer auth;
+
+    @Length(max = 1024, message = "Description max length is 1024 character.")
+    private String description;
 }

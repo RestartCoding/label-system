@@ -48,6 +48,7 @@ public class LabelServiceImpl implements LabelService {
         label.setCode(Labels.generateCode());
         label.setAuth(labelInput.getAuth());
         label.setStatus(LabelStatus.UNAUDITED.getCode());
+        label.setDescription(labelInput.getDescription());
         label.setCreator(UserUtils.currUsername());
         Date date = new Date();
         label.setCreateTime(date);

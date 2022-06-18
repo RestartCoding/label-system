@@ -73,7 +73,7 @@ public class LabelController {
         }
     }
 
-  @PreAuthorize("hasAuthority('label:import')")
+    @PreAuthorize("hasAuthority('label:import')")
     @PostMapping("/import")
     @JsonView(ImportExportDTO.ImportResultView.class)
     public List<ImportExportDTO> importLabel(MultipartFile file) throws IOException {

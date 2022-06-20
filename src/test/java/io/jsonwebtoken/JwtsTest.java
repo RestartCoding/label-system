@@ -1,7 +1,8 @@
 package io.jsonwebtoken;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import io.jsonwebtoken.lang.Assert;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -23,6 +24,6 @@ public class JwtsTest {
 
     Jws<Claims> claims =
         Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(jwtStr);
-    Assert.assertEquals(subject, claims.getBody().getSubject());
+    Assert.isTrue(subject.equals(claims.getBody().getSubject()));
   }
 }

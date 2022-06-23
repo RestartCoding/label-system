@@ -41,6 +41,11 @@ public class Label {
     @Length(max = 1024, message = "Description max length is 1024.")
     private String description;
 
+    /**
+     * 应用部门
+     */
+    private String deptCode;
+
     private String creator;
 
     private Date createTime;

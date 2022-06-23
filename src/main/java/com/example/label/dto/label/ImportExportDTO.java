@@ -11,35 +11,33 @@ import lombok.Data;
  */
 @Data
 public class ImportExportDTO {
-  /**
-   * 标签编号
-   */
+  /** 标签编号 */
   @ExcelProperty(index = 0)
   private String code;
 
-  /**
-   * 标签全名
-   */
+  /** 标签全名 */
   @ExcelProperty(index = 1)
   private String fullName;
 
-  /**
-   * 标签权限
-   */
+  /** 标签权限 */
   @ExcelProperty(index = 2)
   private String auth;
 
-  /**
-   * 标签状态
-   */
+  /** 标签状态 */
   @ExcelProperty(index = 3)
   private String status;
 
-  /**
-   * 描述
-   */
+  /** 描述 */
   @ExcelProperty(index = 4)
   private String description;
+
+  /** 所属部门 */
+  @ExcelProperty(index = 5)
+  private String deptName;
+
+  /** 部门编号 */
+  @ExcelProperty(index = 6)
+  private String deptCode;
 
   @JsonView(ImportResultView.class)
   @ExcelIgnore
@@ -49,5 +47,5 @@ public class ImportExportDTO {
   @JsonView(ImportResultView.class)
   private String msg;
 
-  public static class ImportResultView{}
+  public static class ImportResultView {}
 }

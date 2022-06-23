@@ -3,9 +3,11 @@ package com.example.label.excel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.example.label.dto.label.ImportExportDTO;
+import com.example.label.entity.Department;
 import com.example.label.entity.Label;
 import com.example.label.enums.LabelAuth;
 import com.example.label.enums.LabelStatus;
+import com.example.label.repository.DeptRepository;
 import com.example.label.repository.LabelRepository;
 import com.example.label.util.Labels;
 import com.example.label.util.SpringBeanUtils;
@@ -19,9 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * @author xiabiao
- */
+/** @author xiabiao */
 public class LabelReadListener implements ReadListener<ImportExportDTO> {
 
   private static final Logger logger = LoggerFactory.getLogger(LabelReadListener.class);
@@ -37,6 +37,7 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
 
   /**
    * TODO: The validation rules may not be complete
+   *
    * @param data data
    * @param context context
    */
@@ -50,8 +51,25 @@ public class LabelReadListener implements ReadListener<ImportExportDTO> {
       return;
     }
 
+    if (ObjectUtils.isEmpty(data.getDeptCode())) {
+      data.setMsg("Dept code can not be empty.");
+      return;
+    }
+
+    if (ObjectUtils.isEmpty(data.getDeptName())) {
+      data.setMsg("Dept name can not be empty.");
+      return;
+    }
+
+    DeptRepository deptRepository = SpringBeanUtils.getBean(DeptRepository.class);
+    Optional<Department> optionalDepartment = deptRepository.findByCode(data.getDeptCode());
+    if (!optionalDepartment.isPresent()
+        || optionalDepartment.get().getName().equals(data.getDeptName())) {
+      data.setMsg("Department not found.");
+    }
+
     // whether label name is regular
-    if (!Labels.isRegularName(Labels.getName(data.getFullName()))){
+    if (!Labels.isRegularName(Labels.getName(data.getFullName()))) {
       data.setMsg("Label name is not regular.");
       return;
     }

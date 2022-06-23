@@ -1,5 +1,6 @@
 package com.example.label.util;
 
+import com.example.label.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -20,6 +21,14 @@ public class UserUtils {
       return (String) authentication.getPrincipal();
     }
     return null;
+  }
+
+  public static User currUser(){
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null){
+      return null;
+    }
+    return (User) authentication.getCredentials();
   }
 
   private UserUtils() {

@@ -2,6 +2,7 @@ package com.example.label.service;
 
 
 import com.example.label.dto.label.LabelInput;
+import com.example.label.dto.label.UpdateLabelDTO;
 import com.example.label.entity.Label;
 
 import java.util.Optional;
@@ -30,7 +31,7 @@ public interface LabelService {
     /**
      * 保存标签
      *
-     * @param label label
+     * @param updateLabelDTO updateLabelDTO
      */
-    void save(Label label);
+    void update(UpdateLabelDTO updateLabelDTO);
 }

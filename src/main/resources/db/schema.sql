@@ -6,6 +6,7 @@ create table label(
     status tinyint not null default 0,
     auth tinyint not null default 0,
     description varchar(1024),
+    dept_code varchar(128),
     creator varchar(128) not null,
     create_time timestamp not null default current_timestamp,
     update_time timestamp not null default current_timestamp,
@@ -19,6 +20,7 @@ create table user(
     password varchar(128) not null,
     first_name varchar(128) not null,
     last_name varchar(128) not null,
+    dept_code varchar(128) not null,
     create_time timestamp not null default current_timestamp,
     update_time timestamp not null default current_timestamp,
     unique(username)
@@ -68,4 +70,13 @@ create table user_label(
     label_code varchar(128) not null,
     create_time timestamp not null default current_timestamp,
     unique (username, label_code)
-)
+);
+
+create table department(
+    id bigint auto_increment primary key,
+    code varchar(128) not null,
+    parent_code varchar(128),
+    name varchar(128) not null,
+    create_time timestamp not null default current_timestamp,
+    update_time timestamp not null default current_timestamp
+);

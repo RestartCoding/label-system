@@ -68,7 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
             // 这里的密码已经是加密之后的了
             Authentication authentication =
                     new JwtAuthenticationToken(
-                            username, optionalUser.get().getPassword(), userService.getAuthorities(username));
+                            username, optionalUser.get(), userService.getAuthorities(username));
             SecurityContextHolder.getContext().setAuthentication(authentication);
           }
         }

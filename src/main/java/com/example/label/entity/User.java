@@ -26,6 +26,8 @@ public class User implements UserDetails {
 
   private String lastName;
 
+  private String deptCode;
+
   private Date createTime;
 
   private Date updateTime;

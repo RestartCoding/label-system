@@ -18,11 +18,11 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
     /**
      * 标签名称和父标签编号查询唯一标签
      *
-     * @param name       name
      * @param parentCode parentCode
+     * @param name       name
      * @return optional label
      */
-    Optional<Label> findByNameAndParentCode(String name, String parentCode);
+    Optional<Label> findByParentCodeAndName(String parentCode, String name);
 
     /**
      * 根据parentCode查找
@@ -56,11 +56,11 @@ public interface LabelRepository extends PagingAndSortingRepository<Label, Long>
     @Query(
             value =
                     "WITH RECURSIVE r(code, name, parent_code, auth, status, description) AS (\n"
-                            + "    SELECT code, concat('/', name), parent_code, auth, status, description\n"
+                            + "    SELECT code, concat('/', name), parent_code, auth, status, description, dept_code\n"
                             + "    FROM label\n"
                             + "    where parent_code is null\n"
                             + "  UNION ALL\n"
-                            + "    SELECT label.code, concat(r.name, '/', label.name), label.parent_code, label.auth, label.status, label.description\n"
+                            + "    SELECT label.code, concat(r.name, '/', label.name), label.parent_code, label.auth, label.status, label.description, label.dept_code\n"
                             + "    FROM label, r\n"
                             + "    WHERE label.parent_code = r.code\n"
                             + "  )\n"
